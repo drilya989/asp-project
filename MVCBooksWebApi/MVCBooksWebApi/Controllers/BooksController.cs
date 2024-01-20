@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using MVCBooksWebApi.Data;
 using MVCBooksWebApi.Models;
 using MVCBooksWebApi.Models.Domain;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MVCBooksWebApi.Controllers
 {
@@ -15,14 +18,28 @@ namespace MVCBooksWebApi.Controllers
 			this.mvcBooksDbContext = mvcBooksDbContext;
 		}
 
-
 		[HttpGet]
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(string searchTitle)
 		{
+			if (!string.IsNullOrEmpty(searchTitle))
+			{
+				var matchingBooks = await mvcBooksDbContext.Books
+					.Where(book => book.Title.Contains(searchTitle))
+					.ToListAsync();
+
+				if (matchingBooks.Any())
+				{
+					return View(matchingBooks);
+				}
+				else
+				{
+					ViewBag.ErrorMessage = "Nie znaleziono książki o takim tytule.";
+				}
+			}
+
 			var books = await mvcBooksDbContext.Books.ToListAsync();
 			return View(books);
 		}
-
 
 		[HttpGet]
 		public IActionResult Add()
@@ -55,8 +72,7 @@ namespace MVCBooksWebApi.Controllers
 			var book = await mvcBooksDbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
 
 			if (book != null)
-			{ 
-
+			{
 				var viewModel = new UpdateBookViewModel()
 				{
 					Id = book.Id,
@@ -67,11 +83,12 @@ namespace MVCBooksWebApi.Controllers
 					Category = book.Category,
 					Amount = book.Amount
 				};
-                return await Task.Run(() => View("View", viewModel));
-            }
-			
-            return RedirectToAction("Index");
-        }
+				return View("View", viewModel);
+			}
+
+			return RedirectToAction("Index");
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> View(UpdateBookViewModel model)
 		{
@@ -80,18 +97,18 @@ namespace MVCBooksWebApi.Controllers
 			if (book != null)
 			{
 				book.Title = model.Title;
-                book.Author = model.Author;
+				book.Author = model.Author;
 				book.ISBN = model.ISBN;
 				book.Pages = model.Pages;
 				book.Category = model.Category;
 				book.Amount = model.Amount;
 
-
 				await mvcBooksDbContext.SaveChangesAsync();
 				return RedirectToAction("Index");
-            }
-            return RedirectToAction("Index");
-        }
+			}
+
+			return RedirectToAction("Index");
+		}
 
 		[HttpPost]
 		public async Task<IActionResult> Delete(UpdateBookViewModel model)
@@ -105,8 +122,8 @@ namespace MVCBooksWebApi.Controllers
 
 				return RedirectToAction("Index");
 			}
-            return RedirectToAction("Index");
-        }
 
+			return RedirectToAction("Index");
+		}
 	}
 }

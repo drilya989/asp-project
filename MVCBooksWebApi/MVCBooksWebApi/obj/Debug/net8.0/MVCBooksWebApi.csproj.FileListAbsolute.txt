@@ -134,3 +134,4 @@ C:\Users\matyl\Desktop\asp-project\MVCBooksWebApi\MVCBooksWebApi\obj\Debug\net8.
 C:\Users\matyl\Desktop\asp-project\MVCBooksWebApi\MVCBooksWebApi\obj\Debug\net8.0\MVCBooksWebApi.pdb
 C:\Users\matyl\Desktop\asp-project\MVCBooksWebApi\MVCBooksWebApi\obj\Debug\net8.0\MVCBooksWebApi.genruntimeconfig.cache
 C:\Users\matyl\Desktop\asp-project\MVCBooksWebApi\MVCBooksWebApi\obj\Debug\net8.0\ref\MVCBooksWebApi.dll
+C:\Users\matyl\Desktop\asp-project\MVCBooksWebApi\MVCBooksWebApi\obj\Debug\net8.0\MVCBooksWebApi.sourcelink.json

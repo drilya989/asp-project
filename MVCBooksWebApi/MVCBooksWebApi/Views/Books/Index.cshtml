@@ -5,6 +5,13 @@
 
 
 <h1>Książki</h1>
+<form method="get" action="@Url.Action("Index")">
+	<div class="form-group">
+		<label for="searchTitle">Wyszukaj książkę po tytule:</label>
+		<input type="text" class="form-control" id="searchTitle" name="searchTitle" />
+	</div>
+	<button type="submit" class="btn btn-primary">Wyszukaj</button>
+</form>
 <table class="table">
 	<thead>
 		<tr>
@@ -34,3 +41,10 @@
 		}
 	</tbody>
 </table>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+	<div class="alert alert-danger" role="alert">
+		@ViewBag.ErrorMessage
+	</div>
+}
